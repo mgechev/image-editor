@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="jqwidgets/styles/jqx.base.css" />
+<link rel="stylesheet" href="jqwidgets/styles/jqx.classic.css" />
+<link rel="stylesheet" href="styles/site.css" />
+<script src="scripts/jquery-1.7.1.min.js"></script>
+<script src="scripts/image-editor.core.js"></script>
+<script src="scripts/image-editor.layers.js"></script>
+<script src="scripts/image-editor.rotate.js"></script>
+<script src="scripts/image-editor.invert.js"></script>
+<script src="scripts/image-editor.imagecontrol.js"></script>
+<script src="scripts/jquery-ui-1.8.18.custom.min.js"></script>
+<script type="text/javascript" src="scripts/fluid/framework/core/js/fluiddocument.js"></script>   <!-- New in v1.3 -->
+<script type="text/javascript" src="scripts/fluid/framework/core/js/jquery.keyboard-a11y.js"></script>
+<script type="text/javascript" src="scripts/fluid/framework/core/js/fluid.js"></script>
+<script type="text/javascript" src="scripts/fluid/framework/core/js/fluidview.js"></script>   <!-- New in v1.3 -->
+<script type="text/javascript" src="scripts/fluid/framework/core/js/fluiddomutilities.js"></script>
+<script type="text/javascript" src="scripts/fluid/framework/core/js/databinding.js"></script>   <!-- New in v1.3 -->
+<script type="text/javascript" src="scripts/fluid/framework/core/js/fluidioc.js"></script>   <!-- New in v1.3 -->
+<script type="text/javascript" src="scripts/fluid/framework/core/js/reordererdomutilities.js"></script>
+<script type="text/javascript" src="scripts/fluid/components/reorderer/js/geometricmanager.js"></script>
+<script type="text/javascript" src="scripts/fluid/components/reorderer/js/reorderer.js"></script>
+<script src="jqwidgets/jqxcore.js"></script>
+<script src="jqwidgets/jqxbuttons.js"></script>
+<script src="jqwidgets/jqxslider.js"></script>
+<script>
+$(document).ready(function () {
+    'use strict';
+    imageEditor = imageEditor || {};
+    imageEditor.init();
+    imageEditor.execute('loadImage', 'images/demo1.jpg');
+    imageEditor.execute('loadImage', 'images/demo2.jpg');
+    imageEditor.execute('loadImage', 'images/demo3.jpg');
+});
+</script>
+</head>
+<body>
+<table class="image-editor-navigation">
+    <thead>
+        <tr><th>Property</th></tr>
+        <tr><th>Value</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                Rotate
+            </td>        
+            <td>
+                <div id="rotate-slider"></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Invert
+            </td>        
+            <td>
+                <div id="invertButton">Invert</div>
+            </td>
+        </tr>              
+        <tr>       
+            <td colspan="2">
+                <div id="saveButton" style="margin: auto;">Save</div>
+            </td>
+        </tr>
+        <tr>        
+            <ol id="image-editor-layers-list" class="image-editor-layers-container">
+            </ol>
+        </tr>
+    </tbody>
+</table>
+<div class="image-editor-body">
+    <div id="canvasWrapper" class="image-editor-wrapper">
+    </div>
+</div>
+</body>
+</html>

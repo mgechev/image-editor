@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<head>
+<script>
+var iEdit = (function () {
+	var canvas,
+		c,
+		width,
+		height,
+		image,
+		zoomStep = 0.1,
+		zoomLevel = 1,
+		picLocation = [0, 0],
+		picSize = { width: 0, height: 0 };
+	function init(id) {
+		canvas = document.getElementById(id);
+		c = canvas.getContext('2d');
+		height = canvas.clientHeight;
+		width = canvas.clientWidth;		
+		console.log('Context initialized!');
+		console.log('Width: ' + width);
+		console.log('Height: ' + height);
+		addEventHandlers();
+		clearScreen();
+	}
+	function clearScreen() {
+		c.save();
+		c.clearRect(0, 0, width, height);
+		c.strokeStyle = '#000000';
+		c.strokeRect(0, 0, width, height);
+		c.stroke();
+		c.restore();
+	}
+	function loadImage(img, left, top) {
+		left = left || 0;
+		top = top || 0;
+		image = img;
+		if (typeof img === 'string') {
+			image = loadImageFromUrl(image, function () {
+				centerImage(image);
+			});
+		}
+		c.drawImage(image, left, top);
+		picLocation = [left, top];
+	}
+	function loadImageFromUrl(url, callback) {
+		console.log('Loading image from URL...');
+		var img = new Image();
+		img.src = url;
+		img.onload = function () {
+			console.log('Image loaded!');
+			picSize.width = img.width;
+			picSize.height = img.height;
+			if (typeof callback === 'function') {
+				callback();
+			}
+		}
+		return img;
+	}
+	function centerImage(img) {
+		var left = (width - img.width) / 2,
+			top = (height - img.height) / 2;
+		console.log('Image centered on: (' + left + ', ' + top + ')');
+		clearScreen();
+		loadImage(img, left, top);
+		picLocation = [left, top];
+	}
+	function zoom(level, loc) {
+		loc = loc || [0,0];
+		zoomLevel = level || (zoomLevel + zoomStep);
+		clearScreen();
+		c.save();
+		picSize = { width: picSize.width * zoomLevel, height: picSize.height * zoomLevel };
+		c.scale(zoomLevel, zoomLevel);
+		loadImage(image, loc[0], loc[1]);
+		c.restore();
+		console.log('Zoomed: ' + zoomLevel * 100 + '%');
+	}
+	function addEventHandlers() {
+		canvas.onclick = function (event) {
+			var x, y;
+			if (event.pageX) {
+				x = event.pageX;
+				y = event.pageY;
+			} else {
+				x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft; 
+				y = event.clientY + document.body.scrollTop + document.documentElement.scrollTop; 
+			}
+			x -= canvas.offsetLeft + picLocation[0];
+			y -= canvas.offsetTop + picLocation[1];
+			console.log('(' + x + ', ' + y + ')');
+			zoom(zoomLevel + zoomStep, [x, y]);
+			console.log('Click inside the canvas! Left: ' + x + ', Top: ' + y);
+		}
+		console.log('Event listeners added!');
+	}
+	return {
+		init: init,
+		loadImage: loadImage,
+		zoom: zoom
+	};
+}());
+
+window.onload = function () {
+	iEdit.init('c1');
+	iEdit.loadImage('http://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Olhos_de_um_gato-3.jpg/220px-Olhos_de_um_gato-3.jpg');
+	
+	var button = document.getElementById('testButton');
+	button.onclick = function () {
+		iEdit.zoom();
+	}
+	
+};
+
+</script>
+</head>
+<body>
+<canvas id="c1" width="640" height="480"></canvas>
+<input type="button" value="Click me!" id="testButton" style="float: left;" />
+</body>
+</html>
